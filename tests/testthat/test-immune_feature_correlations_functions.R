@@ -4,7 +4,7 @@ cohort_obj1 <- pcawg_immune_subtype_cohort_obj
 response_tbl1 <- build_ifc_response_tbl(cohort_obj1, "EPIC_B_Cells")
 
 test_that("build_ifc_response_tbl", {
-    expected_columns <-  c("sample", "response_display", "response_value")
+    expected_columns <-  c("sample", "response_display", "response_valu")
     expect_named(response_tbl1, expected_columns)
 })
 
