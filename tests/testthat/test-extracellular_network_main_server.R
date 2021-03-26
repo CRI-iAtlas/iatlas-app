@@ -21,7 +21,6 @@ test_that("extracellular_network_main_server_tcga_study_no_results", {
       expect_type(output$select_groups_ui, "list")
 
       expect_type(output$select_style, "list")
-      expect_type(output$select_genes, "list")
       expect_type(output$select_celltypes, "list")
 
       expect_equal(selected_genes(), 2)
@@ -59,7 +58,6 @@ test_that("extracellular_network_main_server_immune_subtype", {
       expect_type(gene_choice_list(), "list")
       expect_type(output$select_groups_ui, "list")
       expect_type(output$select_style, "list")
-      expect_type(output$select_genes, "list")
       expect_type(output$select_celltypes, "list")
       session$setInputs("group_selected" = "C1")
       session$setInputs("selected_genes" = "gene:2")
@@ -107,7 +105,6 @@ test_that("extracellular_network_main_server_tcga_study_no_stratification", {
       expect_type(output$select_groups_ui, "list")
 
       expect_type(output$select_style, "list")
-      expect_type(output$select_genes, "list")
       expect_type(output$select_celltypes, "list")
 
       expect_equal(selected_genes(), 2)
@@ -143,7 +140,6 @@ test_that("extracellular_network_main_server_tcga_study_with_stratification", {
       expect_type(output$select_groups_ui, "list")
       expect_type(output$select_statify_groups_ui, "list")
       expect_type(output$select_style, "list")
-      expect_type(output$select_genes, "list")
       expect_type(output$select_celltypes, "list")
       session$setInputs("group_selected" = "BRCA")
       session$setInputs("stratified_group_selected" = c("C1", "C2"))
