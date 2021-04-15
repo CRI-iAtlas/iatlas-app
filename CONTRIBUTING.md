@@ -26,6 +26,11 @@ This procedure lists the files that need to be updated or started, as well as th
 | My New Module | new_module | analysis | Description of new module |
 
 
+- display: name displayed in the module selection menus.
+- name: name used for internal reference (see steps 2, 3, and 4). 
+- type: defines in which area of the Explore section of iAtlas the new module will be added to. Possible values: analysis, ici, tool, other.
+- description: module description added in the main page of the Explore section in iAtlas.
+
 #### 2. Create a `new_module_ui.R` and `new_module_server.R` in the `R` folder:
 
 Please note that the name of these files should be in the format `[name]_ui.R` and `[name]_server.R`, where [name] is the *name* attribute added in (1).
