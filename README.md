@@ -44,7 +44,7 @@ To run the app locally:
 
 1. Run the command shiny::runApp() in your console
 
-## Branches: Staging & Master
+## Branches: Staging & Main
 
 We recommend the following workflow. When you are starting a new feature or project:
 
@@ -95,9 +95,9 @@ Once your pull request has been accepted, our GitLab CI/CD will automatically de
 
 * Staging Server: https://isb-cgc.shinyapps.io/iatlas-staging/
 
-### Master
+### Main
 
-Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production.
+Once you validate everything is working in staging, the staging branch can be merged into main and then deployed to production.
 
 ## Installing and Upgrading Packages
 
