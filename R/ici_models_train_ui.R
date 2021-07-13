@@ -2,11 +2,11 @@ ici_models_train_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    messageBox(
+    iatlas.modules::messageBox(
       width = 24,
       shiny::p("Select parameters of interest for model training")
     ),
-    optionsBox(
+    iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
         width = 8,
@@ -37,7 +37,7 @@ ici_models_train_ui <- function(id){
     shiny::fluidRow(
       shiny::column(
         width = 3,
-        optionsBox(
+        iatlas.modules::optionsBox(
           width = 12,
           shiny::selectInput(ns("train_method"),
                              label = "3. Select training method",
@@ -49,7 +49,7 @@ ici_models_train_ui <- function(id){
                              max = 10,
                              step = 1,
                              value = 3),
-          optionsBox(
+          iatlas.modules::optionsBox(
             width = 12,
             title = "Advanced",
             collapsible = TRUE,
@@ -93,7 +93,7 @@ ici_models_train_ui <- function(id){
       shiny::column(
         width = 9,
         shiny::verticalLayout(
-          messageBox(
+          iatlas.modules::messageBox(
             width = 12,
             textOutput(ns("samples_summary")),
             shiny::br(),
@@ -104,7 +104,7 @@ ici_models_train_ui <- function(id){
             shiny::actionButton(ns("compute_train"), "Train Model"),
             shiny::htmlOutput(ns("missing_sample"))
           ),
-          plotBox(
+          iatlas.modules::plotBox(
             width = 12,
             DT::dataTableOutput(ns("results")),
             plotly::plotlyOutput(ns("plot_coef")) %>%
@@ -114,7 +114,7 @@ ici_models_train_ui <- function(id){
         )
       )
     ), #fluidRow
-    optionsBox(
+    iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
         width = 5,
@@ -127,7 +127,7 @@ ici_models_train_ui <- function(id){
     ),
     shiny::column(
       width = 12,
-      plotBox(
+      iatlas.modules::plotBox(
         width = 24,
         uiOutput(ns("test_plots")),
         shiny::downloadButton(ns("download_test"), "Download testing predictions")
