@@ -7,6 +7,22 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.15/bioc"
       },
@@ -516,6 +532,17 @@
       "Repository": "CRAN",
       "Hash": "4f57884290cc75ab22f4af9e9d4ca862",
       "Requirements": []
+    },
+    "anytime": {
+      "Package": "anytime",
+      "Version": "0.3.9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "74a64813f17b492da9c6afda6b128e3d",
+      "Requirements": [
+        "BH",
+        "Rcpp"
+      ]
     },
     "arrow": {
       "Package": "arrow",
@@ -2723,6 +2750,22 @@
         "sourcetools",
         "withr",
         "xtable"
+      ]
+    },
+    "shinyWidgets": {
+      "Package": "shinyWidgets",
+      "Version": "0.7.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2fb744ccca8ab2b6caf99e15dc5f0146",
+      "Requirements": [
+        "anytime",
+        "bslib",
+        "htmltools",
+        "jsonlite",
+        "rlang",
+        "sass",
+        "shiny"
       ]
     },
     "shinycssloaders": {
