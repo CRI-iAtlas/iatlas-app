@@ -1,33 +1,58 @@
-.chapter {
-  color: black;
-  text-align: left;
-  font-family: Georgia;
-  font-size: 20px;
+div.dtsp-verticalContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
 }
 
-.chapter-container {
-  background-color: white;
-  border-radius: 10px;
+div.dtsp-verticalContainer div.dtsp-verticalPanes,
+div.dtsp-verticalContainer div.container{
+    width: 30%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 0;
 }
 
-#toc_container {
-  position: fixed;
-  top: 0;
-  background: #f9f9f9 none repeat scroll 0 0;
-  border: 1px solid #aaa;
-  display: table;
-  font-size: 95%;
-  margin-bottom: 1em;
-  padding: 20px;
-  width: auto;
+div.dtsp-verticalContainer div.dtsp-verticalPanes{
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 26%;
 }
 
-.toc_title {
-  font-weight: 700;
-  text-align: center;
+div.dtsp-verticalPanes {
+    margin-right: 20px;
 }
 
-#toc_container li,
-#toc_container ul,
-#toc_container ul li {
-  list-style: outside none none !important;
+div.dtsp-title {
+    margin-right: 0px !important;
+    margin-top: 13px !important;
+}
+
+input.dtsp-search {
+    min-width: 0px !important;
+    padding-left: 0px !important;
+    margin: 0px !important;
+}
+
+div.dtsp-verticalContainer div.dtsp-verticalPanes div.dtsp-searchPanes{
+    flex-direction: column;
+    flex-basis: 0px;
+}
+
+div.dtsp-verticalContainer div.dtsp-verticalPanes div.dtsp-searchPanes div.dtsp-searchPane{
+    flex-basis: 0px;
+}
+
+div.dtsp-verticalContainer div.container{
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 60%;
+}
+
+div.dtsp-panesContainer {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 5px;
+}

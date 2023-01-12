@@ -4,37 +4,27 @@ new_dataset_selection_server <- function(id, cohort_obj){
     id,
     function(input, output, session) {
         ns <- session$ns
-        datasets <- list('Cancer Genomics' = c('TCGA', 'PCAWG'),
-                         'Immunotherapy' = c('Choueiri 2016 - KIRC, PD-1', 'Gide 2019 - SKCM, PD-1 +/- CTLA4'))
+
+        datasets <- data.frame(
+          v2 = shinyInput(checkboxInput, 8, 'v2_', value = TRUE),
+          name = c('TCGA', 'PCAWG', "Chen 2016 - SKCM, Anti-CTLA4", 'Choueiri 2016 - KIRC, PD-1', 'Gide 2019 - SKCM, PD-1 +/- CTLA4', 'Choueiri 2016 - KIRC, PD-1', 'Gide 2019 - SKCM, PD-1 +/- CTLA4', "Chen 2016 - SKCM, Anti-CTLA4"),
+          type = c('Cancer Genomics' , 'Cancer Genomics', 'Immunotherapy', 'Immunotherapy', 'Immunotherapy', 'RNA-Seq','RNA-Seq', "Nanostring"))
 
 
+        output$interactionUI <- DT::renderDT(
+          ioresponse_data$dataset_df %>%
+            dplyr::select(Dataset, Samples, Patients, Study, Antibody, `Sequencing Method`),
+          server = FALSE,
+          escape = FALSE,
+          rownames = FALSE,
+          options = list(
+            dom = 'Pfrtip',
+            searchPanes = list(layout = "columns-1")
 
-        output$datasets_toc <- shiny::renderUI({
-            tags$div(
-              id = 'toc_container',
-              tags$p(
-                class = 'toc_title',
-                'Contents'
-              ),
-              tags$ul(
-                class = 'toc_list',
-                #toc
-                tags$li(tags$a(href = '#Cancer Genomics', 'Cancer Genomics')), tags$li(tags$a(href = '#Immunotherapy', 'Immunotherapy'))
-                #lazyeval::lazy_eval(paste_dataset_level_titles(datasets))
-                    )
-            )
-
-
-        })
-
-        output$interactionUI <- shiny::renderUI({
-
-          DT::datatable(ioresponse_data$dataset_df %>%
-                           select(Dataset, Study, Antibody, Samples, Patients, `Sequencing Method`))
-
-          # all_boxes <- get_listed_boxes_with_headers(datasets, session)
-          # do.call(fluidRow, all_boxes)
-        })
+          ),
+          extensions = c('Select', 'SearchPanes'),
+          selection = 'none'
+        )
     }
   )
 }

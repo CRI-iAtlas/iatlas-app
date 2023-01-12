@@ -2,11 +2,9 @@ new_dataset_selection_ui <- function(id){
 
     ns <- shiny::NS(id)
 #
-#     datasets <- list('Cancer Genomics' = c('TCGA', 'PCAWG'),
-#                      'Immunotherapy' = c('Choueiri 2016 - KIRC, PD-1', 'Gide 2019 - SKCM, PD-1 +/- CTLA4'))
 
 
-    tags$head(tags$style(HTML("css/table_of_contents.css")))
+    # tags$head(tags$style(HTML("css/table_of_contents.css")))
 
 
     shiny::tagList(
@@ -17,22 +15,18 @@ new_dataset_selection_ui <- function(id){
             width = 12,
             shiny::p("Test, test!")
         ),
-        iatlas.modules::optionsBox(
-            width = 3,
-            column(
-                width = 12,
-                shiny::uiOutput(ns("datasets_toc"))
 
-            )
-        ),
         iatlas.modules::optionsBox(
-            width = 9,
-            # awesomeCheckboxGroup2(
-            #     inputId = "somevalue",
-            #     label = "",
-            #     choices = datasets
-            # ),
-            shiny::uiOutput(ns("interactionUI"))
+            width = 12,
+            DT::DTOutput(ns("interactionUI"))
         )
+            # tags$div(
+            #     class = "dtsp-verticalContainer",
+            #     tags$div(class = "dtsp-verticalPanes"),
+            #     tags$div(
+            #         class = "container",
+            #     )
+            # )
+        #)
     )
 }
