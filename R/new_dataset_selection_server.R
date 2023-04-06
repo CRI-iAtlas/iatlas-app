@@ -17,12 +17,11 @@ new_dataset_selection_server <- function(id, cohort_obj){
           server = FALSE,
           escape = FALSE,
           rownames = FALSE,
-          options = list(
-            dom = 'Pfrtip',
-            searchPanes = list(layout = "columns-1")
-
-          ),
           extensions = c('Select', 'SearchPanes'),
+          options = list(
+            dom = 'Pfrtip'#,
+            #searchPanes = list(layout = "columns-1")
+          ),
           selection = 'none'
         )
     }
