@@ -1,5 +1,5 @@
 new_dataset_selection_server <- function(id, cohort_obj){
-
+#TODO:stack filters vertically. Start here https://stackoverflow.com/questions/75103876/datatable-in-r-shiny-with-searchpane-vertically-stacked-next-to-datatable
   shiny::moduleServer(
     id,
     function(input, output, session) {
