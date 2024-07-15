@@ -1,5 +1,5 @@
 {
-  "bioconductor.version": "3.15",
+  "bioconductor.version": "3.19",
   "external.libraries": [],
   "ignored.packages": [],
   "package.dependency.fields": [
@@ -7,7 +7,7 @@
     "Depends",
     "LinkingTo"
   ],
-  "ppm.enabled": null,
+  "ppm.enabled": true,
   "ppm.ignored.urls": [],
   "r.version": [],
   "snapshot.type": "implicit",
