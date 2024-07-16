@@ -1,13 +1,13 @@
 Package: iatlas.app
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: The CRI-iAtlas immuno-oncology portal.
+Version: 0.0.1.0
 Authors@R:
     person(given = "First",
            family = "Last",
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: The CRI-iAtlas immuno-oncology portal: a visual interface to a large collection of harmonized data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

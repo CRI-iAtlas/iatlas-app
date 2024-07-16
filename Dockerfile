@@ -12,6 +12,8 @@ COPY renv/activate.R renv/activate.R
 RUN apt -y update && apt -y install libpq-dev postgresql-client libcurl4-openssl-dev libssl-dev libxml2-dev gettext-base curl r-cran-xml libv8-dev cmake libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
 
 # Resolve dependencies
+# renv::restore()
+# install(type='binary')
 ENV DOCKERBUILD 1
 RUN R -e "source(\"renv/activate.R\"); renv::restore()"
 
@@ -19,7 +21,7 @@ RUN R -e "source(\"renv/activate.R\"); renv::restore()"
 EXPOSE 3838
 
 # Run the app
-CMD ["R", "-e", "shiny::runApp('/home/gitlab/iatlas-app', host='0.0.0.0', port=3838)"]
+CMD ["R", "-e", "shiny::runApp('/users/dgibbs/Code/iatlas-app', host='0.0.0.0', port=3838)"]
 
 
 # helpful commands:
