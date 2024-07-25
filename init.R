@@ -1,3 +1,4 @@
+print("STARTING iATLAS")
 devtools::load_all(devtools::as.package(".")$path)
 
 # load_config(Sys.getenv("R_CONFIG_ACTIVE", unset = "dev"))
