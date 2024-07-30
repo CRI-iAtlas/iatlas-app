@@ -1,23 +1,26 @@
 #ARG R_VERSION
 #FROM r-base:${R_VERSION}
-FROM r-base:latest
+FROM r-base:4.4.1
 
 # Install supporting packages
 RUN apt -y update
 RUN apt -y install libpq-dev postgresql-client libcurl4-openssl-dev libssl-dev libxml2-dev gettext-base curl r-cran-xml libv8-dev cmake libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
 
+RUN R -e "install.packages('renv', repos = c(CRAN = 'https://cloud.r-project.org'))"
+
 # Creating the home dir
 RUN mkdir -p /home/iatlas-app
-# COPY renv.lock .
-# COPY renv/activate.R renv/activate.R
-ADD . /home/iatlas-app
 WORKDIR /home/iatlas-app
+COPY renv.lock .
+#COPY renv/activate.R renv/activate.R
+
+ENV RENV_PATHS_LIBRARY renv/library
+RUN R -e "renv::restore()"
+
+ADD . /home/iatlas-app
 
 # Resolve dependencies
-# renv::restore()
-# install(type='binary')
-ENV DOCKERBUILD 1
-RUN R -e "source(\"renv/activate.R\"); renv::restore()"
+#RUN R -e "source(\"renv/activate.R\"); renv::restore()"
 
 # Expose port
 EXPOSE 3838
