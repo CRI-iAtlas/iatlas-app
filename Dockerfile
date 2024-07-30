@@ -8,11 +8,10 @@ RUN apt -y install libpq-dev postgresql-client libcurl4-openssl-dev libssl-dev l
 
 # Creating the home dir
 RUN mkdir -p /home/iatlas-app
-RUN mkdir -p /home/iatlas-app/shiny-app
+# COPY renv.lock .
+# COPY renv/activate.R renv/activate.R
+ADD . /home/iatlas-app
 WORKDIR /home/iatlas-app
-
-COPY renv.lock .
-COPY renv/activate.R renv/activate.R
 
 # Resolve dependencies
 # renv::restore()
@@ -24,7 +23,7 @@ RUN R -e "source(\"renv/activate.R\"); renv::restore()"
 EXPOSE 3838
 
 # Run the app
-CMD ["R", "-e", "shiny::runApp('/home/iatlas-app', host='0.0.0.0', port=3838)"]
+# CMD ["R", "-e", "shiny::runApp('/home/iatlas-app', host='0.0.0.0', port=3838)"]
 
 # helpful commands:
 # sudo systemctl start docker
