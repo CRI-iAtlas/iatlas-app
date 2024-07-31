@@ -19,14 +19,10 @@ RUN R -e "renv::restore()"
 
 ADD . /home/iatlas-app
 
-# Resolve dependencies
-#RUN R -e "source(\"renv/activate.R\"); renv::restore()"
-
-# Expose port
 EXPOSE 3838
 
 # Run the app
-# CMD ["R", "-e", "shiny::runApp('/home/iatlas-app', host='0.0.0.0', port=3838)"]
+CMD ["R", "--vanilla", "-e", "source('init.R'); shiny::runApp('/home/iatlas-app/', host='0.0.0.0', port=3838)"]
 
 # helpful commands:
 # sudo systemctl start docker
