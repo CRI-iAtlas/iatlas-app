@@ -51,7 +51,7 @@ shiny::shinyServer(function(input, output, session) {
 
   ici_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
-    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, ici_cohort_obj)
+    purrr::pwalk(call_iatlas_module, input, session, ici_cohort_obj)
 
   # CG Modules ----------------------------------------------------------
 
@@ -64,19 +64,19 @@ shiny::shinyServer(function(input, output, session) {
 
   cg_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
-    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cg_cohort_obj)
+    purrr::pwalk(call_iatlas_module, input, session, cg_cohort_obj)
 
   # Tool Modules --------------------------------------------------------------
 
   tool_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
-    purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
+    purrr::pwalk(call_iatlas_module, input, session)
 
   # Single cell Modules --------------------------------------------------------------
 
   sc_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
-    purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
+    purrr::pwalk(call_iatlas_module, input, session)
 
   # Other ---------------------------------------------------------------------
 
