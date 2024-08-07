@@ -9,3 +9,11 @@ services:
       watch:
         - action: rebuild
           path: .
+networks:
+  iatlas-network:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: "192.168.7.7/24"
+                gateway: "192.168.6.6"
