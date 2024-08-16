@@ -9,6 +9,20 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 - [plotly](https://plot.ly/r/)
 - [crosstalk](https://rstudio.github.io/crosstalk/)
 
+
+## Docker Install
+
+Using Docker, you can create a working environment by doing the following:
+
+1. Clone this repository, enter the directory, and from the terminal...
+
+1. Build the docker image `docker compose build`
+
+1. Run the app with `docker run -p 3838:3838 iatlas-app`
+
+1. Log into the image with `docker run -p 3838:3838 -it iatlas-app bash`
+
+
 ## Install
 
 ### Requirements

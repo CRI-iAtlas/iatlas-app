@@ -1,5 +1,6 @@
 services:
   shiny-app:
+    image: iatlas-app
     build:
       context: .
       dockerfile: Dockerfile

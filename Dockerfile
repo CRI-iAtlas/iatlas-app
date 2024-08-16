@@ -4,7 +4,8 @@ FROM r-base:4.4.1
 
 # Install supporting packages
 RUN apt -y update
-RUN apt -y install libpq-dev postgresql-client libcurl4-openssl-dev libssl-dev libxml2-dev gettext-base curl r-cran-xml libv8-dev cmake libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+RUN apt -y --allow-downgrades install libcurl4t64=8.8.0-4
+RUN apt -y install libpq-dev postgresql-client libcurl4-openssl-dev libssl-dev libxml2-dev gettext-base curl r-cran-xml libv8-dev cmake libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libtiff5-dev
 
 RUN R -e "install.packages('renv', repos = c(CRAN = 'https://cloud.r-project.org'))"
 
@@ -22,7 +23,7 @@ ADD . /home/iatlas-app
 EXPOSE 3838
 
 # Run the app
-CMD ["R", "--vanilla", "-e", "source('init.R'); shiny::runApp('/home/iatlas-app/', host='0.0.0.0', port=3838)"]
+CMD ["R", "--vanilla", "-e", "source('docker_init.R')"]
 
 # helpful commands:
 # sudo systemctl start docker
