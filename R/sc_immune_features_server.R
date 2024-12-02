@@ -5,26 +5,28 @@ sc_immune_features_server <- function(id, cohort_obj){
 
       ns <- session$ns
 
-      gsea_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_gsea_norm.feather"))
-      sc_clinical <- shiny::reactive(arrow::read_feather("inst/feather/sc_clinical.feather"))
+      single_cell_datasets <- shiny::reactive(
+        iatlasGraphQLClient::query_datasets(types = "scrna")
+      )
+
+      pseudobulk_df <- shiny::reactive({
+        iatlasGraphQLClient::query_pseudobulk_feature_values() %>%
+          dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name") %>%
+          dplyr::select(
+            "sample_name",
+            "group" = "cell_type",
+            "feature_name" ,
+            "feature_display",
+            "feature_value" = "value",
+            "dataset_name"
+          )
+      })
 
       sc_immune_features_distribution_server(
         "sc_immune_features_distribution",
         cohort_obj,
-        gsea_df,
-        feature_op = shiny::reactive(c( #TODO: change this when data is in cohort_obj
-          "Wound Healing" = "CHANG_CORE_SERUM_RESPONSE_UP",
-          "Macrophage Regulation" = "CSF1_response",
-          "Lymphocyte Infiltration" = "LIexpression_score",
-          "Proliferation" = "Module11_Prolif_score",
-          "IFN-gamma Response" = "Module3_IFN_score",
-          "TGF-beta Response" = "TGFB_score_21050467",
-          "Th1 Cells" = "Th1_cells",
-          "Th2 Cells" = "Th2_cells"
-        )),
-
-          #shiny::reactive(unique(gsea_df()$feature_name)),
-        sc_clinical
+        pseudobulk_df,
+        feature_op = dplyr::filter(cohort_obj()$feature_tbl, !class %in% c("Clinical", "umap"))
       )
 
       observeEvent(input$method_link,{

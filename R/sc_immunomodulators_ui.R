@@ -24,16 +24,6 @@ sc_immunomodulators_ui <- function(id){
             iatlas.modules::optionsBox(
               width=24,
               shiny::column(
-                width = 4,
-                shiny::checkboxGroupInput(
-                  ns("datasets"),
-                  "Choose dataset(s)",
-                  choices = c("MSK - SCLC" = "MSK",
-                              "Vanderbilt - colon polyps" = "Vanderbilt"),
-                  selected = c("MSK", "Vanderbilt")
-                )
-              ),
-              shiny::column(
                 width = 8,
                 shiny::selectizeInput(
                   ns("genes"),
@@ -45,7 +35,7 @@ sc_immunomodulators_ui <- function(id){
             ),
             iatlas.modules::plotBox(
               width=24,
-              plotly::plotlyOutput(ns("bubble_plot"))
+              plotly::plotlyOutput(ns("bubble_plot"), height = "800px")
             )
           )
         #)

@@ -1,18 +1,25 @@
-sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feature_op, clinical_info){
+sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feature_op){
   shiny::moduleServer(
     id,
     function(input, output, session) {
 
       ns <- session$ns
 
-      #TODO: change this when data is in cohort_obj
-      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
-      group2_display <- shiny::reactive({
-        iatlasGraphQLClient::query_tags(type = "parent_group") %>%
-          dplyr::filter(tag_name %in% colnames(clinical_info())) %>%
-          dplyr::select(tag_name, tag_short_display) %>%
-          dplyr::add_row(tag_name = "Tumor_tissue_type", tag_short_display ="Tumor tissue type") %>%
-          dplyr::add_row(tag_name = "Polyp_Histology", tag_short_display = "Polyp Histology")
+      output$excluded_dataset <- shiny::renderText({
+        if(all(cohort_obj()$dataset_displays %in% unique(cohort_obj()$group_tbl$dataset_display))){
+          ""
+        }else{
+          excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
+          paste(
+            paste(excluded_datasets, collapse = ", "),
+            " not included because all samples were filtered in SC Cohort Selection."
+          )
+        }
+      })
+
+      dataset_display <- reactive({
+        shiny::req(cohort_obj())
+        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
       })
 
       plot_function <- shiny::reactive({
@@ -27,44 +34,33 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
         shiny::selectInput(
           ns("var1_surv"),
           "Select Feature",
-          feature_op(),
+          choices = feature_op %>% create_nested_list_by_class()
         )
       })
 
       output$group2 <- renderUI({
-        shiny::req(group2_display())
-        #Second level group option
-        selectInput(
+        shiny::checkboxInput(
           ns("groupvar2"),
-          "Select extra Sample Group (optional)",
-          c("None" = "None",
-            group2_display()$tag_short_display),
-          selected = "None"
+          "Stratify cell types by group",
+          value = TRUE
         )
       })
 
-      output$excluded_dataset <- shiny::renderText({
-        "" #update once we have the sc data into the cohort object
-      })
-
       output$ui_stat <- shiny::renderUI({
-        #TODO: Update when data is integrated to cohort_obj
-        # req(cohort_obj(), input$groupvar2)
-        # if(cohort_obj()$group_name == "Sample_Treatment" | input$groupvar2 == "Sample_Treatment"){
-        #   radioButtons(ns("paired"), "Sample type", choices = c("Independent", "Paired"), inline = TRUE, selected = "Paired")
-        # }else{
+        req(cohort_obj(), input$groupvar2)
+        if(cohort_obj()$group_name == "Sample_Treatment" & (input$groupvar2 == TRUE)){
+          radioButtons(ns("paired"), "Sample type", choices = c("Independent", "Paired"), inline = TRUE, selected = "Paired")
+        }else{
           radioButtons(ns("paired"), "Sample type", choices = c("Independent", "Paired"), inline = TRUE, selected = "Independent")
-        #}
+        }
       })
 
 
       varible_display_name <- shiny::reactive({
-        if(is.null(names(feature_op()))) input$var1_surv
-        else names(feature_op())[feature_op() == input$var1_surv]
-        # convert_value_between_columns(input_value = input$var1_surv,
-        #                               df = feature_df,
-        #                               from_column = "name",
-        #                               to_column = "display")
+        convert_value_between_columns(input_value = input$var1_surv,
+                                      df = feature_op,
+                                      from_column = "name",
+                                      to_column = "display")
       })
 
       varible_plot_label <- shiny::reactive({
@@ -96,23 +92,14 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       df_selected <- shiny::reactive({
         shiny::req(gsea_df(), input$var1_surv)
+
         samples <- gsea_df() %>%
-          dplyr::filter(dataset_name %in% input$datasets) %>%
-          dplyr::filter(feature_name == input$var1_surv) %>%
           build_distribution_io_df(., "feature_value", input$scale_method)
 
-        if(input$groupvar2 != "None"){
-          selected_group <- group2_display()[group2_display()$tag_short_display == input$groupvar2,]$tag_name
-
+        if(input$groupvar2){
           samples <- samples %>%
-            dplyr::left_join(dplyr::select(clinical_info(), sample_name, selected_group), by = dplyr::join_by("sample_name")) %>%
-            dplyr::mutate(
-            Group2 = dplyr::if_else(
-              sample_name == "sum",
-              "sum",
-              .data[[selected_group]]
-            ),
-            group_name = paste(group, Group2, sep = " - ")) %>%
+            dplyr::left_join(dplyr::select(cohort_obj()$sample_tbl, sample_name, group_name), by = dplyr::join_by("sample_name")) %>%
+            dplyr::mutate(group_name = paste(group, group_name, sep = " - ")) %>%
             dplyr::select("feature_name", "feature_value", "dataset_name", "sample_name", "group" = group_name, "y")
         }
         samples
@@ -127,13 +114,12 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
         shiny::req(df_selected())
         group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(df_selected()$group))
         setNames(group_colors, unique(df_selected()$group))
-        #setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
       })
 
-      xlabel <- shiny::reactive({
-        if(input$groupvar2 == "None") "Cell Type"
-        else paste("Cell Type", input$groupvar2, sep = " - ")
-      })
+      # xlabel <- shiny::reactive({
+      #   if(is_false(input$groupvar2)) "Cell Type"
+      #   else paste("Cell Type", cohort_obj()$group_display, sep = " - ")
+      # })
 
       output$dist_plots <- plotly::renderPlotly({
         shiny::req(df_selected())
@@ -143,13 +129,13 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
                                   plot_function()(df =  dplyr::filter(df_selected(), dataset_name == x),
                                                   x_col = "group",
                                                   y_col = "y",
-                                                  xlab = xlabel(),
+                                                  #xlab = xlabel(),
                                                   ylab = varible_plot_label(),
                                                   custom_data = as.character(x),
                                                   fill_colors = group_colors(),
                                                   #source = "p1",
                                                   showlegend = F)  %>%
-                                    add_title_subplot_plotly(dataset_display()[[x]])%>%
+                                    add_title_subplot_plotly(dataset_display()[[x]]) %>%
                                     plotly::layout(
                                       xaxis = list(automargin = TRUE,
                                                    tickangle = 80,
@@ -201,12 +187,12 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
                        paired = paired_test(),
                        test = test_function(),
                        label = group,
-                       dataset_title = dataset_displays(),
+                       dataset_title = dataset_display(),
                        .f = get_stat_test)
       })
 
       output$stats1 <- DT::renderDataTable(
-       # shiny::req(test_summary_table())
+        # shiny::req(test_summary_table())
         test_summary_table(),
         options = list(
           order = list(list(7, 'desc'))
@@ -244,7 +230,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
         create_histogram(
           df = drilldown_df(),
           x_col = "y",
-          title = paste(get_plot_title(unique(drilldown_df()$dataset_name), dataset_displays()), unique(drilldown_df()$group), sep = "\n"),
+          title = paste((dataset_display()[[unique(drilldown_df()$dataset_name)]]), unique(drilldown_df()$group), sep = "\n"),
           x_lab = varible_plot_label()
         )
       })
