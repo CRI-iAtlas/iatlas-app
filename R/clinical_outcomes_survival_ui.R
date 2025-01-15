@@ -12,26 +12,30 @@ clinical_outcomes_survival_ui <- function(id) {
         shiny::fluidRow(
             iatlas.modules::optionsBox(
                 width = 12,
-                shiny::column(
-                    width = 8,
-                    shiny::uiOutput(ns("time_feature_selection_ui"))
+                shiny::fluidRow(
+
+                  shiny::column(
+                      width = 8,
+                      shiny::uiOutput(ns("time_feature_selection_ui"))
+                  ),
+                  shiny::column(
+                      width = 2,
+                      shiny::checkboxInput(
+                          ns("confint"),
+                          "Confidence Intervals",
+                          value = F
+                      )
+                  ),
+                  shiny::column(
+                      width = 2,
+                      shiny::checkboxInput(
+                          ns("risktable"),
+                          "Risk Table",
+                          value = T
+                      )
+                  )
                 ),
-                shiny::column(
-                    width = 2,
-                    shiny::checkboxInput(
-                        ns("confint"),
-                        "Confidence Intervals",
-                        value = F
-                    )
-                ),
-                shiny::column(
-                    width = 2,
-                    shiny::checkboxInput(
-                        ns("risktable"),
-                        "Risk Table",
-                        value = T
-                    )
-                )
+                shiny::uiOutput(ns("extra_group_ui"))
             ),
             iatlas.modules::plotBox(
                 width = 12,
