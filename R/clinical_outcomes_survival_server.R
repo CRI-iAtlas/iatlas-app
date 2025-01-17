@@ -69,8 +69,17 @@ clinical_outcomes_survival_server <- function(id, cohort_obj) {
           )
         ))
 
-        if(input$extra_group == "None") colors_km <- unname(cohort_obj()$plot_colors)
-        else colors_km <- grDevices::colorRampPalette(unname(cohort_obj()$plot_colors), space = "rgb")(num_groups)
+        if(input$extra_group == "None"){
+          colors_km <- unname(cohort_obj()$plot_colors)
+          title_km <- cohort_obj()$group_display
+        } else{
+          colors_km <- grDevices::colorRampPalette(unname(cohort_obj()$plot_colors), bias = 0.8, space = "rgb")(num_groups)
+          title_km <- paste(
+            cohort_obj()$group_display,
+            cohort_obj()$feature_tbl[which(cohort_obj()$feature_tbl$name == input$extra_group), "display"],
+            sep = " - "
+          )
+        }
 
         fit <- survival::survfit(
           survival::Surv(time, status) ~ group,
@@ -82,7 +91,7 @@ clinical_outcomes_survival_server <- function(id, cohort_obj) {
           df = survival_value_tbl(),
           confint = input$confint,
           risktable = input$risktable,
-          title = cohort_obj()$group_display,
+          title = title_km,
           group_colors = colors_km
         )
       })

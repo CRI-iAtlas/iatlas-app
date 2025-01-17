@@ -8,31 +8,37 @@ ici_clinical_outcomes_plot_ui <- function(id){
     ),
     iatlas.modules::optionsBox(
       width=12,
+      shiny::fluidRow(
+        shiny::column(
+          width = 8,
+          shiny::selectInput(
+            ns("timevar"),
+            "Survival Endpoint",
+            c("Overall Survival" = "OS_time",
+              "Progression Free Interval" = "PFI_time_1"),
+            selected = "OS_time"
+          )
+        ),
+        shiny::column(
+          width = 2,
+          shiny::checkboxInput(
+            ns("confint"),
+            "Confidence Intervals",
+            value = F
+          )
+        ),
+        shiny::column(
+          width = 2,
+          shiny::checkboxInput(
+            ns("risktable"),
+            "Risk Table",
+            value = T
+          )
+        )
+      ),
       shiny::column(
         width = 8,
-        shiny::selectInput(
-          ns("timevar"),
-          "Survival Endpoint",
-          c("Overall Survival" = "OS_time",
-            "Progression Free Interval" = "PFI_time_1"),
-          selected = "OS_time"
-        )
-      ),
-      shiny::column(
-        width = 2,
-        shiny::checkboxInput(
-          ns("confint"),
-          "Confidence Intervals",
-          value = F
-        )
-      ),
-      shiny::column(
-        width = 2,
-        shiny::checkboxInput(
-          ns("risktable"),
-          "Risk Table",
-          value = T
-        )
+        shiny::uiOutput(ns("extra_group_ui"))
       )
     ),#optionsBox
     shiny::column(

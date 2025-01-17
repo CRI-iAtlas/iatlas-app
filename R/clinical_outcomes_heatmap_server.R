@@ -25,17 +25,35 @@ clinical_outcomes_heatmap_server <- function(
         )
       })
 
+      output$extra_group_ui <- shiny::renderUI({
+        features_list <- cohort_obj()$feature_tbl %>%
+          dplyr::filter(!class %in% c("Survival Status", "Survival Time")) %>%
+          create_nested_list_by_class(.,
+                                      class_column = "class",
+                                      internal_column = "name",
+                                      display_column = "display")
+
+        shiny::selectInput(
+          inputId = ns("extra_group"),
+          label = "Select extra group",
+          choices = c("None", features_list),
+          selected = "None"
+
+        )
+      })
+
       status_feature_choice <- shiny::reactive({
         shiny::req(input$time_feature_choice)
         get_co_status_feature(input$time_feature_choice)
       })
 
       survival_value_tbl <- shiny::reactive({
-        shiny::req(input$time_feature_choice, status_feature_choice())
+        shiny::req(input$time_feature_choice, status_feature_choice(), input$extra_group)
         build_co_survival_value_tbl(
           cohort_obj(),
           input$time_feature_choice,
-          status_feature_choice()
+          status_feature_choice(),
+          input$extra_group
         )
       })
 
@@ -69,6 +87,7 @@ clinical_outcomes_heatmap_server <- function(
           eventdata <- input$mock_event_data
         }
         shiny::validate(shiny::need(eventdata, "Click on above heatmap."))
+        eventdata$x <- sub("\\s*-.*", "", eventdata$x) #in case there's a second group
         return(eventdata)
       })
 

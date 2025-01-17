@@ -1,4 +1,23 @@
-build_survival_df <- function(df, group_column, time_column, filter_df = TRUE) {
+build_survival_df <- function(df, group_column, time_column, filter_df = TRUE,  cohort_obj , extra_group = "None") {
+
+  if(extra_group != "None"){
+    extra_group_df <- cohort_obj$get_feature_values(features = extra_group) %>%
+      dplyr::select(
+        "sample_name",
+        "value" = "feature_value")
+    df <- df %>%
+      dplyr::inner_join(extra_group_df, by = "sample_name") %>%
+      dplyr::mutate(
+        "group" = paste(
+          group_name,
+          ifelse(value > median(value), "upper half", "lower half"),
+          sep = " - "
+        )
+      ) %>%
+      dplyr::select(sample_name, group, dataset_name, feature_name, feature_display, feature_value) %>%
+      dplyr::rename(group_name = group)
+  }
+
   if (time_column == "OS_time") {
     time_status <-  "OS"
     if(filter_df == TRUE){
@@ -29,7 +48,7 @@ build_survival_df <- function(df, group_column, time_column, filter_df = TRUE) {
     na.omit()
 }
 
-get_group_colors <- function(cohort_obj){
+get_group_colors <- function(cohort_obj, extra_group = "None"){
   if("Immune feature bin range" %in% cohort_obj$group_tbl$characteristics){
     group_colors <- viridis::viridis(dplyr::n_distinct(cohort_obj$sample_tbl$group_name))
     names(group_colors) <- sapply(unique(cohort_obj$sample_tbl$group_name), function(a) paste('measure=',a,sep=''))
@@ -37,5 +56,10 @@ get_group_colors <- function(cohort_obj){
     group_colors <- unique(cohort_obj$group_tbl$color)
     names(group_colors) <- sapply(unique(cohort_obj$group_tbl$short_name), function(a) paste('measure=',a,sep=''))
   }
-  group_colors
+  if(extra_group == "None"){
+    return(group_colors)
+  }else{#we will need twice as many colors
+    return(grDevices::colorRampPalette(group_colors, bias = 0.8, space = "rgb")(2*length(group_colors)))
+  }
+
 }

@@ -35,7 +35,10 @@ clinical_outcomes_survival_ui <- function(id) {
                       )
                   )
                 ),
-                shiny::uiOutput(ns("extra_group_ui"))
+                shiny::column(
+                  width = 8,
+                  shiny::uiOutput(ns("extra_group_ui"))
+                )
             ),
             iatlas.modules::plotBox(
                 width = 12,

@@ -10,13 +10,19 @@ clinical_outcomes_heatmap_ui <- function(id) {
         shiny::fluidRow(
             iatlas.modules::optionsBox(
                 width = 12,
-                shiny::column(
-                    width = 6,
-                    shiny::uiOutput(ns("time_feature_selection_ui"))
+                shiny::fluidRow(
+                  shiny::column(
+                      width = 6,
+                      shiny::uiOutput(ns("time_feature_selection_ui"))
+                  ),
+                  shiny::column(
+                      width = 6,
+                      shiny::uiOutput(ns("class_selection_ui"))
+                  )
                 ),
                 shiny::column(
-                    width = 6,
-                    shiny::uiOutput(ns("class_selection_ui"))
+                  width = 8,
+                  shiny::uiOutput(ns("extra_group_ui"))
                 )
             ),
             iatlas.modules::plotBox(

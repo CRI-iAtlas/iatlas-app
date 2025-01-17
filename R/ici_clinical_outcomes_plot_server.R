@@ -20,6 +20,23 @@ ici_clinical_outcomes_plot_server <- function(
         }
       })
 
+      output$extra_group_ui <- shiny::renderUI({
+        features_list <- cohort_obj()$feature_tbl %>%
+          dplyr::filter(!class %in% c("Survival Status", "Survival Time")) %>%
+          create_nested_list_by_class(.,
+                                      class_column = "class",
+                                      internal_column = "name",
+                                      display_column = "display")
+
+        shiny::selectInput(
+          inputId = ns("extra_group"),
+          label = "Select extra group",
+          choices = c("None", features_list),
+          selected = "None"
+
+        )
+      })
+
       feature_df <- shiny::reactive({
         pre_treat_samples <- iatlasGraphQLClient::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
           dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
@@ -41,7 +58,9 @@ ici_clinical_outcomes_plot_server <- function(
             build_survival_df(
               df = dataset_df,
               group_column = "group_name",
-              time_column = input$timevar
+              time_column = input$timevar,
+              cohort_obj = cohort_obj(),
+              extra_group = input$extra_group
             )
            }
         })
@@ -65,7 +84,7 @@ ici_clinical_outcomes_plot_server <- function(
           confint = input$confint,
           risktable = input$risktable,
           title = names(all_survival()),
-          group_colors = get_group_colors(cohort_obj()),
+          group_colors = get_group_colors(cohort_obj(), extra_group = input$extra_group),
           facet = TRUE)
       })
 
@@ -84,7 +103,13 @@ ici_clinical_outcomes_plot_server <- function(
           shiny::renderPlot(all_kmplot()[9]),
           shiny::renderPlot(all_kmplot()[10]),
           shiny::renderPlot(all_kmplot()[11]),
-          shiny::renderPlot(all_kmplot()[12])
+          shiny::renderPlot(all_kmplot()[12]),
+          shiny::renderPlot(all_kmplot()[13]),
+          shiny::renderPlot(all_kmplot()[14]),
+          shiny::renderPlot(all_kmplot()[15]),
+          shiny::renderPlot(all_kmplot()[16]),
+          shiny::renderPlot(all_kmplot()[17]),
+          shiny::renderPlot(all_kmplot()[18]),
         )
 
       })
