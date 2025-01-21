@@ -35,19 +35,19 @@ ici_overview_datasets_server <- function(
         )
 
         if(data_group() != "single-cell RNA-Seq"){
-          tags$div(
+          shiny::tags$div(
             display_text,
-            tags$a(href=download_text()[1],
+            shiny::tags$a(href=download_text()[1],
                    download_text()[2])
           )
         }else{
 
 
-          tags$div(
+          shiny::tags$div(
             display_text,
             shiny::p("The MSK and Vanderbilt data sets were generated as part of the NCI Human Tumor Atlas Network, shared via ",
                    a(href = "https://humantumoratlas.org/", "https://humantumoratlas.org/ .")),
-            tags$a(href=download_text()[1],
+            shiny::tags$a(href=download_text()[1],
                    download_text()[2])
           )
         }
