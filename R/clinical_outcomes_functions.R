@@ -12,8 +12,7 @@ get_co_status_feature <- function(time_feature){
   else stop("Unknown time feature")
 }
 
-build_co_survival_value_tbl <- function(cohort_obj, time, status) {
-
+build_co_survival_value_tbl <- function(cohort_obj, time, status, extra_group = "None") {
   time_tbl <-
     cohort_obj$get_feature_values(time) %>%
     dplyr::select("sample_name", "time" = "feature_value")
@@ -22,8 +21,23 @@ build_co_survival_value_tbl <- function(cohort_obj, time, status) {
     cohort_obj$get_feature_values(status) %>%
     dplyr::select("sample_name", "status" = "feature_value")
 
-  tbl <- cohort_obj$sample_tbl %>%
-    dplyr::rename("group" = "group_name") %>%
+  if(extra_group == "None"){
+    tbl <- cohort_obj$sample_tbl %>%
+      dplyr::rename("group" = "group_name")
+  }else{
+    extra_group_df <- cohort_obj$get_feature_values(features = extra_group)
+    tbl <- cohort_obj$sample_tbl %>%
+      dplyr::inner_join(extra_group_df, by = "sample_name") %>%
+      dplyr::mutate(
+        "group" = paste(
+          group_name,
+          ifelse(feature_value > median(feature_value), "upper half", "lower half"),
+          sep = " - "
+        )
+      )
+  }
+
+  tbl <- tbl %>%
     dplyr::inner_join(time_tbl, by = "sample_name") %>%
     dplyr::inner_join(status_tbl, by = "sample_name") %>%
     dplyr::select("sample" = "sample_name", "group", "time", "status")

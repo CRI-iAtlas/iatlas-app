@@ -1634,8 +1634,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
-      "RemoteRef": "0.6.3",
-      "RemoteSha": "92af72aa2ffc40c8673f62081da1f148a8bd8d59",
+      "RemoteRef": "master",
+      "RemoteSha": "c6a83890c34f72de2d271e8b7e165e6835139cc9",
       "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master",
       "Requirements": [
         "DT",
@@ -1661,7 +1661,7 @@
         "viridis",
         "viridisLite"
       ],
-      "Hash": "d5dc7c5b898609b611125bb8cba39242"
+      "Hash": "ed76f474409cea362c8d50ee2e70d639"
     },
     "iatlasGraphQLClient": {
       "Package": "iatlasGraphQLClient",

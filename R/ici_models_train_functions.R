@@ -87,7 +87,19 @@ get_predictors_df <- function(
 
   #for categorical predictors, we need to make sure to store the key to label them correctly
 
-  cat_df <- iatlasGraphQLClient::query_tag_samples(cohorts = datasets, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
+  #we need the funnction below while an issue with iatlasGraphQLClient::query_tag_samples() is not solved (https://github.com/CRI-iAtlas/iatlasGraphQLClient/issues/40)
+  query_and_merge <- function(datasets, parent_tags) {
+           results_list <- list()
+           for (tag in parent_tags) {
+             result <- iatlasGraphQLClient::query_tag_samples(cohorts = datasets, parent_tags = tag)
+              results_list[[tag]] <- result
+              }
+           merged_results <- dplyr::bind_rows(results_list, .id = "parent_tag")
+
+          return(merged_results)
+  }
+
+  cat_df <- query_and_merge(datasets, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
     dplyr::inner_join(iatlasGraphQLClient::query_tags_with_parent_tags(parent_tags = c(selected_response, selected_pred, "TCGA_Study")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
 
   categories <- cat_df %>%
@@ -545,20 +557,24 @@ get_testing_results <- function(model, test_df, training_obj, survival_endpoint)
                       group_column = "label_prediction",
                       time_column =available_endpoint[1],
                       filter_df = FALSE)
+    if(nrow(surv_df)>0){
+      fit_df <- survival::survfit(survival::Surv(time, status) ~ measure, data = surv_df)
 
-    fit_df <- survival::survfit(survival::Surv(time, status) ~ measure, data = surv_df)
+      test_title <- get_test_title(dataset = unique(dataset_df$dataset_display), available_endpoint[2])
 
-    test_title <- get_test_title(dataset = unique(dataset_df$dataset_display), available_endpoint[2])
+      kmplot <- create_kmplot(fit = fit_df,
+                              df = surv_df,
+                              confint = TRUE,
+                              risktable = FALSE,
+                              title = test_title,
+                              group_colors = c("red", "green"),
+                              show_pval = TRUE,
+                              show_pval_method = TRUE,
+                              facet = FALSE)
+    }else{
+      kmplot <- ""
+    }
 
-    kmplot <- create_kmplot(fit = fit_df,
-                            df = surv_df,
-                            confint = TRUE,
-                            risktable = FALSE,
-                            title = test_title,
-                            group_colors = c("red", "green"),
-                            show_pval = TRUE,
-                            show_pval_method = TRUE,
-                            facet = FALSE)
     list(
         results = as.data.frame(df),
         accuracy_results = accuracy_results,

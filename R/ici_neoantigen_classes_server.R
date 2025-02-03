@@ -1,9 +1,9 @@
 ici_neoantigen_classes_server <- function(
-  id,
-  cohort_obj,
-  count_df,
-  dataset_displays,
-  legend_plot
+    id,
+    cohort_obj,
+    count_df,
+    dataset_displays,
+    legend_plot
 ) {
   shiny::moduleServer(
     id,
@@ -12,7 +12,7 @@ ici_neoantigen_classes_server <- function(
       ns <- session$ns
 
       cohort_count <- shiny::reactive({
-        cohort_patients <- cohort_obj()$sample_tbl %>%
+        cohort_obj()$sample_tbl %>%
           dplyr::inner_join(count_df, by = c("sample_name" = "sample")) %>%
           dplyr::mutate(ERROR = NA) %>%
           dplyr::group_by(dataset_name, group_name, feature_name) %>%
@@ -23,8 +23,8 @@ ici_neoantigen_classes_server <- function(
       })
 
       all_plots <- shiny::reactive({
-        shiny::validate(shiny::need(nrow(cohort_count)>0, "There is no neoantigen data for the selected dataset(s)"))
         shiny::req(cohort_count())
+        shiny::validate(shiny::need(nrow(cohort_count())>0, "There is no neoantigen data for the selected dataset(s)"))
 
         purrr::map(cohort_obj()$dataset_names, function(x){
           dataset_df <-  cohort_count() %>%
@@ -59,7 +59,8 @@ ici_neoantigen_classes_server <- function(
       })
 
       output$legend <-  DT:: renderDT({
-        shiny::validate(shiny::need(nrow(cohort_count)>0, ""))
+        shiny::req(cohort_count())
+        shiny::validate(shiny::need(nrow(cohort_count())>0, ""))
         legend_plot()})
 
       output$neoantigen_classes_plot <- plotly::renderPlotly({
