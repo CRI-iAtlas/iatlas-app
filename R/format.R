@@ -3,9 +3,9 @@
 theme_1012 <- ggplot2::theme(
     axis.text = ggplot2::element_text(face = "bold", size = 10, color = "black"),
     axis.title = ggplot2::element_text(face = "bold", size = 12, color = "black"),
-    panel.border = ggplot2::element_rect(colour = "black", size = 1),
+    panel.border = ggplot2::element_rect(colour = "black", linewidth = 1),
     strip.text = ggplot2::element_text(face = "bold", size = 10, color = "black"),
-    strip.background = ggplot2::element_rect(colour = "black", size = 1),
+    strip.background = ggplot2::element_rect(colour = "black", linewidth = 1),
     title = ggplot2::element_text(face = "bold", size = 14, color = "black"),
     legend.text = ggplot2::element_text(face = "bold", size = 8, color = "black")
 )
