@@ -46,7 +46,7 @@ copy_number_response_server <- function(id, cohort_obj) {
       })
 
       gene_tbl  <- shiny::reactive(
-         iatlasGraphQLClient::query_copy_number_result_genes(cohort_obj()$dataset_names)
+         iatlasGraphQLClient::query_copy_number_result_genes("TCGA")
       )
 
       gene_set_tbl <- shiny::reactive(iatlasGraphQLClient::query_gene_types())
