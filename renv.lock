@@ -4658,12 +4658,12 @@
         "R (>= 2.10)"
       ],
       "RemoteType": "github",
-      "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "iatlas.modules2",
       "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "c6a83890c34f72de2d271e8b7e165e6835139cc9"
+      "RemoteSha": "3e26096522f0c3a7a3d7e0e254c0c65dfc12992d",
+      "RemoteHost": "api.github.com",
+      "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master"
     },
     "iatlasGraphQLClient": {
       "Package": "iatlasGraphQLClient",
