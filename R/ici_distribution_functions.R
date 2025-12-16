@@ -180,7 +180,6 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_titl
     comb_groups <- utils::combn(1:length(split_data), 2)
 
     purrr::map2_dfr(.x = comb_groups[1,], .y = comb_groups[2,], function(x,y){
-
       if(paired == TRUE & nrow(split_data[[x]]) != nrow(split_data[[y]])){
         test_data <- data.frame(Dataset = dataset_display,
                                 Group1 = paste0("Not available for paired test. ", names(split_data)[x], " (", nrow(split_data[[x]]),")"),
@@ -189,7 +188,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_titl
                                 statistic = NA,
                                 p.value = NA,
                                 stringsAsFactors = FALSE)
-      }else if(nrow(split_data[[x]]) <=1 | nrow(split_data[[y]]) <=1){
+      }else if(nrow(split_data[[x]]) <=2 | nrow(split_data[[y]]) <=2){
         test_data <- data.frame(Dataset = dataset_display,
                                 Group1 = paste0("Few samples to perform test. ", names(split_data)[x], " (", nrow(split_data[[x]]),")"),
                                 Group2 = paste0(names(split_data)[y], " (", nrow(split_data[[y]]), ")"),
