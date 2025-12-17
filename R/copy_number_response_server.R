@@ -46,7 +46,7 @@ copy_number_response_server <- function(id, cohort_obj) {
       })
 
       gene_tbl  <- shiny::reactive(
-         iatlasGraphQLClient::query_copy_number_result_genes(cohort_obj()$dataset_names)
+         iatlasGraphQLClient::query_copy_number_result_genes(datasets = "TCGA", paging = list(page = 1, limit = 5000))
       )
 
       gene_set_tbl <- shiny::reactive(iatlasGraphQLClient::query_gene_types())
@@ -101,7 +101,8 @@ copy_number_response_server <- function(id, cohort_obj) {
           tags = groups(),
           entrez = gene_entrez_query(),
           features = input$response_variable,
-          direction = direction_query()
+          direction = direction_query(),
+          paging = list(page = 1, limit = 5000)
         )
         shiny::validate(need(
           all(!is.null(result_tbl), nrow(result_tbl) > 0),
