@@ -200,3 +200,5 @@ Warning: Error in file: cannot open the connection
 ```
 
 Can be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
+
+In case you get an error related to the installation of `devtools`, run `renv::install("devtools")` and then repeat `devtools::load_all(".")`.
