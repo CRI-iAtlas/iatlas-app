@@ -13,11 +13,18 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 ### Requirements
 
-- R: https://www.r-project.org/ - v4.2+
+- R: https://www.r-project.org/ - v4.2+. Using the version in `renv.lock` file is suggested
 
 - RStudio: https://rstudio.com/products/rstudio/download
 
 ### MacOS Install instructions
+
+#### MacOS Installer
+
+Install R .pkg from https://cran.r-project.org/bin/macosx/ 
+Download and install RStudio: https://rstudio.com/products/rstudio/download
+
+#### Package manager install
 
 Install package manager:
 - [HomeBrew](https://brew.sh/) (the instructions below are for HomeBrew)
@@ -27,7 +34,7 @@ Then in the terminal, run:
 
 - xcode-select --install
 - brew install cairo
-- brew install R or install R .pkg from https://cran.r-project.org/bin/macosx/
+- brew install R
 - download and install RStudio: https://rstudio.com/products/rstudio/download
 
 ### Initialize R Packages and run App
@@ -44,7 +51,24 @@ To run the app locally:
 
 1. Run the command shiny::runApp() in your console
 
-## Branches: Staging & Master
+## Common Errors
+
+When running `shiny::runApp()`for the first time in a session, you may run into the following error:
+
+```R
+Warning in file(con, "r") :
+  cannot open file '/footer.html': No such file or directory
+Warning: Error in file: cannot open the connection
+  75: file
+  74: readLines
+  73: shiny::includeHTML
+```
+
+Can be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
+
+In case you get an error related to the installation of `devtools`, run `renv::install("devtools")` and then repeat `devtools::load_all(".")`.
+
+## Branches: Staging & Dev
 
 We recommend the following workflow. When you are starting a new feature or project:
 
@@ -186,19 +210,3 @@ concordanceIndex::concordanceIndex(predictions, observations)
 
 ... where `predictions` and `observations` are numerical vectors of the same length.
 
-## Common Errors
-
-When running `shiny::runApp()`for the first time in a session, you may run into the following error:
-
-```R
-Warning in file(con, "r") :
-  cannot open file '/footer.html': No such file or directory
-Warning: Error in file: cannot open the connection
-  75: file
-  74: readLines
-  73: shiny::includeHTML
-```
-
-Can be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
-
-In case you get an error related to the installation of `devtools`, run `renv::install("devtools")` and then repeat `devtools::load_all(".")`.
