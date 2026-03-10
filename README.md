@@ -21,9 +21,8 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 #### MacOS Installer
 
-Install R .pkg from https://cran.r-project.org/bin/macosx/ 
-
-Download and install RStudio: https://rstudio.com/products/rstudio/download
+- Install R .pkg from https://cran.r-project.org/bin/macosx/ 
+- Download and install RStudio: https://rstudio.com/products/rstudio/download
 
 #### Package manager install
 
@@ -190,24 +189,3 @@ rsconnect::setAccountInfo(
 ```R
 rsconnect::deployApp(appName = "iatlas-branchxxx-app")
 ```
-
-## Methods
-
-While many of the results presented in tables and plots are taken directly from Immune Response Working Group (IRWG) data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
-
-### Correlation — Spearman's rank-order correlation
-
-```R
-stats::cor(x, y, method = "spearman", use = "pairwise.complete.obs")
-```
-
-### Concordance Index (CI)
-
-Concordance indexes for survival endpoints with respect to different immune readouts were computed using a custom package developed by Tai-Hsien Ou Yang at Columbia University. The **concordanceIndex** package includes a single synonymous function that can be used as follows:
-
-```R
-concordanceIndex::concordanceIndex(predictions, observations)
-```
-
-... where `predictions` and `observations` are numerical vectors of the same length.
-
