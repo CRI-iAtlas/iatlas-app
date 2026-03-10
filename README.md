@@ -1,7 +1,7 @@
 
 # CRI iAtlas-App
 
-The CRI iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/iatlas-app/](https://isb-cgc.shinyapps.io/iatlas-app/) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
+The CRI iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/iatlas](https://isb-cgc.shinyapps.io/iatlas) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
 
 The portal is built entirely in **R** and **Shiny** using the **RStudio** development environment. Layout and interactivity within the portal are achieved by heavy use of the following packages:
 
@@ -13,7 +13,7 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 ### Requirements
 
-- R: https://www.r-project.org/ - v4.2+. Using the version in `renv.lock` file is suggested
+- R: https://www.r-project.org/ - v4.2+. Using the R version in `renv.lock` file is recommended.
 
 - RStudio: https://rstudio.com/products/rstudio/download
 
@@ -22,6 +22,7 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 #### MacOS Installer
 
 Install R .pkg from https://cran.r-project.org/bin/macosx/ 
+
 Download and install RStudio: https://rstudio.com/products/rstudio/download
 
 #### Package manager install
@@ -64,13 +65,13 @@ Warning: Error in file: cannot open the connection
   73: shiny::includeHTML
 ```
 
-Can be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
+This can normally be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
 
 In case you get an error related to the installation of `devtools`, run `renv::install("devtools")` and then repeat `devtools::load_all(".")`.
 
 ## Branches: Staging & Dev
 
-We recommend the following workflow. When you are starting a new feature or project:
+The default branch is `staging`. We recommend the following workflow. When you are starting a new feature or project:
 
 ### Create a Working Branch
 
