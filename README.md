@@ -1,7 +1,7 @@
 
 # CRI iAtlas-App
 
-The CRI iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/iatlas-app/](https://isb-cgc.shinyapps.io/iatlas-app/) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
+The CRI iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/iatlas](https://isb-cgc.shinyapps.io/iatlas) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
 
 The portal is built entirely in **R** and **Shiny** using the **RStudio** development environment. Layout and interactivity within the portal are achieved by heavy use of the following packages:
 
@@ -13,11 +13,18 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 ### Requirements
 
-- R: https://www.r-project.org/ - v4.2+
+- R: https://www.r-project.org/ - v4.2+. Using the R version in `renv.lock` file is recommended.
 
 - RStudio: https://rstudio.com/products/rstudio/download
 
 ### MacOS Install instructions
+
+#### MacOS Installer
+
+- Install R .pkg from https://cran.r-project.org/bin/macosx/ 
+- Download and install RStudio: https://rstudio.com/products/rstudio/download
+
+#### Package manager install
 
 Install package manager:
 - [HomeBrew](https://brew.sh/) (the instructions below are for HomeBrew)
@@ -27,7 +34,7 @@ Then in the terminal, run:
 
 - xcode-select --install
 - brew install cairo
-- brew install R or install R .pkg from https://cran.r-project.org/bin/macosx/
+- brew install R
 - download and install RStudio: https://rstudio.com/products/rstudio/download
 
 ### Initialize R Packages and run App
@@ -44,9 +51,26 @@ To run the app locally:
 
 1. Run the command shiny::runApp() in your console
 
-## Branches: Staging & Master
+## Common Errors
 
-We recommend the following workflow. When you are starting a new feature or project:
+When running `shiny::runApp()`for the first time in a session, you may run into the following error:
+
+```R
+Warning in file(con, "r") :
+  cannot open file '/footer.html': No such file or directory
+Warning: Error in file: cannot open the connection
+  75: file
+  74: readLines
+  73: shiny::includeHTML
+```
+
+This can normally be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
+
+In case you get an error related to the installation of `devtools`, run `renv::install("devtools")` and then repeat `devtools::load_all(".")`.
+
+## Branches: Staging & Dev
+
+The default branch is `staging`. We recommend the following workflow. When you are starting a new feature or project:
 
 ### Create a Working Branch
 
@@ -165,40 +189,3 @@ rsconnect::setAccountInfo(
 ```R
 rsconnect::deployApp(appName = "iatlas-branchxxx-app")
 ```
-
-## Methods
-
-While many of the results presented in tables and plots are taken directly from Immune Response Working Group (IRWG) data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
-
-### Correlation — Spearman's rank-order correlation
-
-```R
-stats::cor(x, y, method = "spearman", use = "pairwise.complete.obs")
-```
-
-### Concordance Index (CI)
-
-Concordance indexes for survival endpoints with respect to different immune readouts were computed using a custom package developed by Tai-Hsien Ou Yang at Columbia University. The **concordanceIndex** package includes a single synonymous function that can be used as follows:
-
-```R
-concordanceIndex::concordanceIndex(predictions, observations)
-```
-
-... where `predictions` and `observations` are numerical vectors of the same length.
-
-## Common Errors
-
-When running `shiny::runApp()`for the first time in a session, you may run into the following error:
-
-```R
-Warning in file(con, "r") :
-  cannot open file '/footer.html': No such file or directory
-Warning: Error in file: cannot open the connection
-  75: file
-  74: readLines
-  73: shiny::includeHTML
-```
-
-Can be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
-
-In case you get an error related to the installation of `devtools`, run `renv::install("devtools")` and then repeat `devtools::load_all(".")`.
